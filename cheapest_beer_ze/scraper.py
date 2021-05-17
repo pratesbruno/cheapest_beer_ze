@@ -13,6 +13,7 @@ class BeerScraper:
         self.driver = None
         self.email = None
         self.password = None
+        self.login_status = None
         self.available_brands = []
         self.prices = []
         self.products = []
@@ -32,6 +33,7 @@ class BeerScraper:
         options.add_argument('--headless')
         options.add_argument('--disable-gpu')
         self.driver = webdriver.Chrome(options=options)
+        print('Driver built.')
     
     def login(self, email, password):
         # Login details
@@ -49,6 +51,15 @@ class BeerScraper:
         button = self.driver.find_element_by_xpath("""//*[@id="login-mail-button-sign-in"]""")
         self.driver.execute_script("arguments[0].click();", button)
         time.sleep(3) # Wait a couple seconds to complete the sign in
+        soup = BeautifulSoup(self.driver.page_source, "html.parser")
+        user_badger = soup.find_all("div", class_="css-1p15ya-userBadgeBase")
+        if len(user_badger) > 0:
+            print('Login successful.')
+            self.login_status = 'Success'
+        else:
+            print('Login failed.')
+            self.login_status = 'Failed'
+
         
     def get_available_brands(self):
         url_brands = 'https://www.ze.delivery/produtos/categoria/cervejas'
@@ -56,6 +67,7 @@ class BeerScraper:
         soup = BeautifulSoup(self.driver.page_source, "html.parser")
         available_brands_html = soup.find_all("h2", class_="css-l9heuk-shelfTitle")
         self.available_brands = [brand_html.text for brand_html in available_brands_html]
+        print('Available brands retrieved.')
         
     def scrape_data(self):
         for brand in self.available_brands:
@@ -75,7 +87,8 @@ class BeerScraper:
                 for price in prices_html:
                     self.prices.append(handle_price(price))
                     self.brands.append(brand) # Leverage the for loop to include brand names
-    
+        print('Data scraped.')
+
     def create_df(self):
         self.df = pd.DataFrame(list(zip(self.products,self.prices,self.brands)),columns=['Product','Price','Brand'])
         self.df['Mls'] = self.df['Product'].map(get_mls)
@@ -100,3 +113,4 @@ class BeerScraper:
         # Apply condition
         self.filtered_df = self.df[combined_cond]
         self.filtered_df.reset_index(drop=True,inplace=True)
+        print('Filters applied.')
