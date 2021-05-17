@@ -1,8 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from cheapest_beer_ze.utils import get_url, handle_price, get_mls, is_returnable
-from cheapest_beer_ze.scraper import BeerScraper
 from cheapest_beer_ze.cheapest_beer import get_cheapest_beers
 
 get_cheapest_beers()

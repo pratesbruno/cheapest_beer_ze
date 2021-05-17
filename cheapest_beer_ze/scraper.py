@@ -5,6 +5,8 @@ from selenium.webdriver.chrome.options import Options
 import time
 import pandas as pd
 import numpy as np
+from cheapest_beer_ze.utils import get_url, handle_price, get_mls, is_returnable
+
 
 class BeerScraper:
     def __init__(self):
