@@ -31,10 +31,12 @@ class BeerScraper:
         options.add_argument('--disable-gpu')
         self.driver = webdriver.Chrome(options=options)
     
-    def login(self, email = "brunoprates@poli.ufrj.br", password = "ze123456"):
+    def login(self, email, password):
         # Login details
         login_url = 'https://www.ze.delivery/conta/entrar'
-        
+        self.email = email
+        self.password = password
+
         # Enter login details in form
         self.driver.get(login_url)
         self.driver.implicitly_wait(6)
@@ -95,3 +97,4 @@ class BeerScraper:
         combined_cond = c0&c1&c2&c3
         # Apply condition
         self.filtered_df = self.df[combined_cond]
+        self.filtered_df.reset_index(drop=True,inplace=True)
