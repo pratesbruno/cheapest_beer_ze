@@ -19,6 +19,7 @@ yapf
 # API
 s3fs
 fastapi
+uvicorn
 
 # utilities
 six>=1.14
@@ -28,6 +29,3 @@ selenium
 bs4
 unidecode
 
-# frontend
-streamlit
-uvicorn

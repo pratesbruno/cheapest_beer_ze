@@ -1,4 +1,3 @@
-import streamlit as st
 import json
 
 from cheapest_beer_ze.scraper import BeerScraper
