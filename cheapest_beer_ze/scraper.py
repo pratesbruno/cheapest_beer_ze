@@ -14,6 +14,7 @@ class BeerScraper:
         self.email = None
         self.password = None
         self.login_status = None
+        self.address = None
         self.available_brands = []
         self.prices = []
         self.products = []
@@ -33,6 +34,7 @@ class BeerScraper:
         options.add_argument('--headless')
         options.add_argument('--disable-gpu')
         self.driver = webdriver.Chrome(options=options)
+        self.driver.implicitly_wait(5)
         print('Driver built.')
     
     def login(self, email, password):
@@ -43,7 +45,6 @@ class BeerScraper:
 
         # Enter login details in form
         self.driver.get(login_url)
-        self.driver.implicitly_wait(6)
         self.driver.find_element_by_xpath("""//*[@id="login-mail-input-email"]""").send_keys(self.email)
         self.driver.find_element_by_xpath("""//*[@id="login-mail-input-password"]""").send_keys(self.password)
 
@@ -59,8 +60,31 @@ class BeerScraper:
         else:
             print('Login failed.')
             self.login_status = 'Failed'
-
+    
+    def define_address(self,address):
         
+        login_url = 'https://www.ze.delivery'
+        self.driver.get(login_url)
+        try:
+            # Click "over 18 years" button
+            self.driver.find_element_by_xpath("""//*[@id="age-gate-button-yes"]""").click()
+            # Click fake address input to reveal true address input
+            self.driver.find_element_by_xpath("""//*[@id="fake-address-search-input"]""").click()
+            # Fill address input with the provided address
+            self.driver.find_element_by_xpath("""//*[@id="address-search-input-address"]""").send_keys(address)
+            # Choose the first address from the google Autocomplete address (Check how to make this more robust later)
+            self.driver.find_element_by_xpath("""//*[@class="css-bk3xhj-container-googleAutocompleteCard-AutoCompleteAddressListItem"][1]""").click()
+            # Choose any complement for the address, as it won't make a difference on the available beers
+            self.driver.find_element_by_xpath("""//*[@id="address-details-input-complement"]""").send_keys('1')
+            # Click the button to send info to the website and continue
+            self.driver.find_element_by_xpath("""//*[@id="address-details-button-continue"]""").click()
+            # Wait 3 seconds for the website to proccess the information
+            time.sleep(3)
+            self.address = address
+            print('Address set.')
+        except:
+            print('Failed to set address. Please try again.')
+
     def get_available_brands(self):
         url_brands = 'https://www.ze.delivery/produtos/categoria/cervejas'
         self.driver.get(url_brands)

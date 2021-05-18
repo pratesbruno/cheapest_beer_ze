@@ -18,6 +18,6 @@ def index():
 
 
 @app.get("/get_beers")
-def get_beers(email, password):
-    json_response = get_cheapest_beers(email,password)
+def get_beers(address):
+    json_response = get_cheapest_beers(address)
     return {"Response": json_response}
