@@ -39,7 +39,6 @@ class BeerScraper:
         self.driver.implicitly_wait(5)
         print('Driver built.')
 
-    
     def define_address(self,address):
         login_url = 'https://www.ze.delivery'
         self.driver.get(login_url)
@@ -99,12 +98,12 @@ class BeerScraper:
         # Sort
         self.df = self.df.sort_values('Price Per Liter')
     
-    def set_filters(self,wb=[],ub=[],r=['Yes','No'],mm=99999):
+    def set_filters(self,wb,ub,r,mm):
         self.wanted_brands = wb
         self.unwanted_brands = ub
         self.returnable = r
         self.max_mls = mm
-        
+
     def apply_filters(self):
         # Conditions
         c0 = self.df['Brand'].isin(self.wanted_brands) if len(self.wanted_brands)>0 else self.df['Brand']==self.df['Brand']
@@ -112,7 +111,8 @@ class BeerScraper:
         c2 = self.df['Returnable'].isin(self.returnable)
         c3 = self.df['Mls']<=self.max_mls
         combined_cond = c0&c1&c2&c3
-        # Apply condition
+
+        # Apply conditions
         self.filtered_df = self.df[combined_cond]
         self.filtered_df.reset_index(drop=True,inplace=True)
         print('Filters applied.')
