@@ -1,74 +1,55 @@
-# Data analysis
-- Document here the project: cheapest_beer_ze
-- Description: Project Description
-- Data Source:
-- Type of analysis:
+# Beer scraper - Zé Delivery
+This project scrapes beer prices and other info from the brazilian delivery website "Zé Delivery", and returns the cheapest options available for the inputed address, subject to constraints defined by the user.
 
-Please document the project the better you can.
+The front-end of this project can be found at: LINK.
 
-# Startup the project
+## Motivation
+price per ml
+College years
+Pesquisa Ze
 
-The initial setup.
+## Project details
 
-Create virtualenv and install the project:
-```bash
-sudo apt-get install virtualenv python-pip python-dev
-deactivate; virtualenv ~/venv ; source ~/venv/bin/activate ;\
-    pip install pip -U; pip install -r requirements.txt
-```
+### Step 1 - Building the scraper
+The first step was to build the scraper. This was mostly done in a jupyter notebook, that later got refactored into a python package.
 
-Unittest test:
-```bash
-make clean install test
-```
+There was no simple API that could be used to get all the information I wanted, so I used selelium and ChromeDriver for scraping.
 
-Check for cheapest_beer_ze in gitlab.com/{group}.
-If your project is not set please add it:
+In order to access the available products in the website, you either have to login to the website, or set an address. I first used the login approach, but I later decided to go for the address option to avoid dealing with sensitive information (passwords), and so users could check the prices of the beer in their region even if they do not have a Zé Delivery account.
 
-- Create a new project on `gitlab.com/{group}/cheapest_beer_ze`
-- Then populate it:
+Besides the beer and their prices, I also wanted to get the brand (which was easy), the volume of the container (which involved some Regex) and whether the beer is "returnable" or not (which means you have to give back an empty container to the deliverer in order to get a discounted price). 
 
-```bash
-##   e.g. if group is "{group}" and project_name is "cheapest_beer_ze"
-git remote add origin git@github.com:{group}/cheapest_beer_ze.git
-git push -u origin master
-git push -u origin --tags
-```
+To rank the cheapest beers, I used the price per mililiters. A few extra functions were included in order to create a dataframe from the results and to filter results based on user input. 
+The possible filters the user can do are: 
+- Filter out chosen beer brands (as some brands are considered unpalatable to some people)
+- Choose a maximum size for the beer bottles/cans (bigger containers have lower price per mls, but get hot faster, so some people do not like them)
+- Filter out the beers that require you to give back empty containers to the deliverer
+- Define which brands they want to see (in this case, you choose the brands that you like and only those are shown - different from filtering out brands)
 
-Functionnal test with a script:
+### Step 2 - Improving scrape time
+Once the scraper was working, I realized it took over 2 minutes to run. This was far too long and most users would not like to wait all this time to get an answer on what is the cheapest beer.
 
-```bash
-cd
-mkdir tmp
-cd tmp
-cheapest_beer_ze-run
-```
+I isolated the methods, measured their times, and realized a certain method was responsible for almost all that time (1m48s). This was because it was doing several get requests, one for each available brand.
 
-# Install
+As the main goal of this project is to find cheap beers, we can assume that most users won't be interested in the high-end, premium brands. So I ran an analysis to figure out the most expensive brands and excluded them. The details of the analysis can be found in the jupyter notebook.
 
-Go to `https://github.com/{group}/cheapest_beer_ze` to see the project, manage issues,
-setup you ssh public key, ...
+After that, the scrape time was reduced by half.
 
-Create a python3 virtualenv and activate it:
 
-```bash
-sudo apt-get install virtualenv python-pip python-dev
-deactivate; virtualenv -ppython3 ~/venv ; source ~/venv/bin/activate
-```
+### Step 3 - Packaging and building an API
+After the scraper was working on the notebook, the code was refactored into a package.
 
-Clone the project and install it:
+I used FastAPI to build an API that receives the address and filters defined by the user, and returns the cheapests beers (in Price per ml).
 
-```bash
-git clone git@github.com:{group}/cheapest_beer_ze.git
-cd cheapest_beer_ze
-pip install -r requirements.txt
-make clean install test                # install and test
-```
-Functionnal test with a script:
+### Step 4 - Deploying with Docker and Google Cloud Run
+The API initially only worked locally, but in order to be used by other users, it had to be deployed. Docker and CG Run were used for that purpose.
 
-```bash
-cd
-mkdir tmp
-cd tmp
-cheapest_beer_ze-run
-```
+There were a few challenges in this proccess. First, the API was not working with the Docker container. After a while, I realized the reason was that Chrome and the ChromeDriver were installed in my local machine only, and not in the container. This was fixed with some changes to the Dockerfile. Still, the driver kept crashing. It took some changes in the version and parameters of the driver (and a lot of time browsing StackOverflow posts) to make it all work.
+
+After the API was running in a Docker container, I uploaded the Docker image to Google Container Registry and deployed it to Google Cloud Run. Now the API is available to anyone.
+
+### Step 5 - Front-End
+Most users do not know how to work with APIs, so I created a front-end that anyone can interact with. I created a separate project for this, so that the front-end is very light and easier to deploy on Heroku.
+
+The front-end repo can be found here:
+And the website can be found here:
