@@ -20,13 +20,12 @@ RUN apt-get install -y google-chrome-stable
 RUN apt-get install libxi6 libgconf-2-4 -y
 
 # Set up Chromedriver Environment variables
-ENV CHROMEDRIVER_VERSION 2.22
+ENV CHROMEDRIVER_VERSION 90.0.4430.24
 ENV CHROMEDRIVER_DIR /chromedriver
 RUN mkdir -p $CHROMEDRIVER_DIR
 
 # Download and install Chromedriver
-RUN wget -q --continue -P $CHROMEDRIVER_DIR "https://chromedriver.storage.googleapis.com/90.0.4430.24/chromedriver_linux64.zip"
-#RUN wget -q --continue -P $CHROMEDRIVER_DIR "http://chromedriver.storage.googleapis.com/$CHROMEDRIVER_VERSION/chromedriver_linux64.zip"
+RUN wget -q --continue -P $CHROMEDRIVER_DIR "https://chromedriver.storage.googleapis.com/$CHROMEDRIVER_VERSION/chromedriver_linux64.zip"
 RUN unzip $CHROMEDRIVER_DIR/chromedriver* -d $CHROMEDRIVER_DIR
 RUN chmod +x $CHROMEDRIVER_DIR/chromedriver
 
