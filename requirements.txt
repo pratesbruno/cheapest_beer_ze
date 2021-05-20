@@ -17,11 +17,14 @@ yapf
 
 # API
 s3fs
+fastapi
+uvicorn
 
 # utilities
 six>=1.14
 
-#web scraping
+# web scraping
 selenium
 bs4
 unidecode
+

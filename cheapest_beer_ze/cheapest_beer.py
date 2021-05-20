@@ -1,9 +1,17 @@
-from cheapest_beer_ze.utils import get_url, handle_price, get_mls, is_returnable
+import json
+
 from cheapest_beer_ze.scraper import BeerScraper
 
-def get_cheapest_beers():
+def get_cheapest_beers(address, wb, ub, r, mm):
     scraper = BeerScraper()
     scraper.build_driver()
-    scraper.login()
+    scraper.define_address(address)
+    if not scraper.address:
+        return 'Address invalid. Please try again with a valid address.'
     scraper.get_available_brands()
-    print(scraper.available_brands)
+    scraper.scrape_data()
+    scraper.create_df()
+    scraper.set_filters(wb,ub,r,mm)
+    scraper.apply_filters()
+    result = scraper.filtered_df.to_json()
+    return json.loads(result)
