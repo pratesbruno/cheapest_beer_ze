@@ -34,44 +34,13 @@ class BeerScraper:
         options.add_argument('--headless')
         options.add_argument('--disable-gpu')
         options.add_argument('--no-sandbox')
+        options.add_argument('--disable-dev-shm-usage') # might slow down the execution since disk will be used instead of memory
         self.driver = webdriver.Chrome(options=options)
         self.driver.implicitly_wait(5)
         print('Driver built.')
 
-        # options = webdriver.ChromeOptions()
-        # options.binary_location = '/app/.apt/usr/bin/google-chrome'
-        # options.add_argument('--no-sandbox')
-        # options.add_argument('--disable-gpu')
-        # options.add_argument("--disable-notifications")
-        # options.add_argument('--headless')
-        # browser = webdriver.Chrome(executable_path=chrome_location, chrome_options=options)
-    
-    def login(self, email, password):
-        # Login details
-        login_url = 'https://www.ze.delivery/conta/entrar'
-        self.email = email
-        self.password = password
-
-        # Enter login details in form
-        self.driver.get(login_url)
-        self.driver.find_element_by_xpath("""//*[@id="login-mail-input-email"]""").send_keys(self.email)
-        self.driver.find_element_by_xpath("""//*[@id="login-mail-input-password"]""").send_keys(self.password)
-
-        # Press sign in button
-        button = self.driver.find_element_by_xpath("""//*[@id="login-mail-button-sign-in"]""")
-        self.driver.execute_script("arguments[0].click();", button)
-        time.sleep(3) # Wait a couple seconds to complete the sign in
-        soup = BeautifulSoup(self.driver.page_source, "html.parser")
-        user_badger = soup.find_all("div", class_="css-1p15ya-userBadgeBase")
-        if len(user_badger) > 0:
-            print('Login successful.')
-            self.login_status = 'Success'
-        else:
-            print('Login failed.')
-            self.login_status = 'Failed'
     
     def define_address(self,address):
-        
         login_url = 'https://www.ze.delivery'
         self.driver.get(login_url)
         try:
@@ -95,13 +64,10 @@ class BeerScraper:
             print('Failed to set address. Please try again.')
 
     def get_available_brands(self):
-        print(1)
         url_brands = 'https://www.ze.delivery/produtos/categoria/cervejas'
-        self.driver.get(url_brands) # ERRO AQUI
-        print(2)
+        self.driver.get(url_brands)
         soup = BeautifulSoup(self.driver.page_source, "html.parser")
         available_brands_html = soup.find_all("h2", class_="css-l9heuk-shelfTitle")
-        print(3)
         self.available_brands = [brand_html.text for brand_html in available_brands_html]
         print('Available brands retrieved.')
         
