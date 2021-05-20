@@ -33,9 +33,18 @@ class BeerScraper:
         options = Options()
         options.add_argument('--headless')
         options.add_argument('--disable-gpu')
+        options.add_argument('--no-sandbox')
         self.driver = webdriver.Chrome(options=options)
         self.driver.implicitly_wait(5)
         print('Driver built.')
+
+        # options = webdriver.ChromeOptions()
+        # options.binary_location = '/app/.apt/usr/bin/google-chrome'
+        # options.add_argument('--no-sandbox')
+        # options.add_argument('--disable-gpu')
+        # options.add_argument("--disable-notifications")
+        # options.add_argument('--headless')
+        # browser = webdriver.Chrome(executable_path=chrome_location, chrome_options=options)
     
     def login(self, email, password):
         # Login details
@@ -86,10 +95,13 @@ class BeerScraper:
             print('Failed to set address. Please try again.')
 
     def get_available_brands(self):
+        print(1)
         url_brands = 'https://www.ze.delivery/produtos/categoria/cervejas'
-        self.driver.get(url_brands)
+        self.driver.get(url_brands) # ERRO AQUI
+        print(2)
         soup = BeautifulSoup(self.driver.page_source, "html.parser")
         available_brands_html = soup.find_all("h2", class_="css-l9heuk-shelfTitle")
+        print(3)
         self.available_brands = [brand_html.text for brand_html in available_brands_html]
         print('Available brands retrieved.')
         
