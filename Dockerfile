@@ -16,11 +16,15 @@ RUN echo "deb http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/so
 
 # Update the package list and install chrome
 RUN apt-get update -y
-RUN apt-get install -y google-chrome-stable
+ARG CHROME_VERSION="89.0.4389.90-1"
+RUN wget --no-verbose -O /tmp/chrome.deb https://dl.google.com/linux/chrome/deb/pool/main/g/google-chrome-stable/google-chrome-stable_${CHROME_VERSION}_amd64.deb \
+  && apt install -y /tmp/chrome.deb \
+  && rm /tmp/chrome.deb
 RUN apt-get install libxi6 libgconf-2-4 -y
 
+
 # Set up Chromedriver Environment variables
-ENV CHROMEDRIVER_VERSION 90.0.4430.24
+ENV CHROMEDRIVER_VERSION 89.0.4389.23
 ENV CHROMEDRIVER_DIR /chromedriver
 RUN mkdir -p $CHROMEDRIVER_DIR
 
