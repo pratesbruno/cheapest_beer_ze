@@ -1,9 +1,10 @@
 # Beer scraper - Zé Delivery
 This project scrapes beer prices and other info from the brazilian delivery website "Zé Delivery", and returns the cheapest options available for the inputed address, subject to constraints defined by the user.
 
-The project involves web scraping, text processing, creating python packages, creating an API, using Docker, deploying with Google Container and Google Cloud Run, building a front-end in Streamlit (different repo), using Pandas for some data manipulation, and finally deploying the final app in Heroku.
+The project involves web scraping, text processing, creating python packages, creating an API, using Docker, deploying with Google Container and Google Cloud Run, building a front-end in Streamlit, using Pandas for some data manipulation, and finally deploying the final app in Heroku.
 
 The front-end of this project can be found at: https://github.com/pratesbruno/cheapest_beer_frontend
+
 The deployed app can be found at: https://cheapest-beer-ze.herokuapp.com/
 
 ## Motivation
@@ -49,12 +50,13 @@ I used FastAPI to build an API that receives the address and filters defined by 
 ### Step 4 - Deploying with Docker and Google Cloud Run
 The API initially only worked locally, but in order to be used by other users, it had to be deployed. Docker and CG Run were used for that purpose.
 
-There were a few challenges in this proccess. First, the API was not working with the Docker container. After a while, I realized the reason was that Chrome and the ChromeDriver were installed in my local machine only, and not in the container. This was fixed with some changes to the Dockerfile. Still, the driver kept crashing. It took some changes in the version and parameters of the driver (and a lot of time browsing StackOverflow posts) to make it all work.
+There were a few challenges in this proccess. First, the API was not working with the Docker container. I realized the reason was that Chrome and the ChromeDriver were installed in my local machine only, and not in the container. This was fixed with some changes to the Dockerfile. Still, the driver kept crashing. It took some changes in the version and parameters of the driver (and a lot of time browsing StackOverflow posts) to make it all work.
 
 After the API was running in a Docker container, I uploaded the Docker image to Google Container Registry and deployed it to Google Cloud Run. Now the API is available to anyone.
 
 ### Step 5 - Front-End
 Most users do not know how to work with APIs, so I created a front-end that anyone can interact with. I created a separate project for this, so that the front-end is very light and easier to deploy on Heroku.
 
-The front-end can be found at: https://github.com/pratesbruno/cheapest_beer_frontend
+The front-end repo can be found at: https://github.com/pratesbruno/cheapest_beer_frontend
+
 The deployed app can be found at: https://cheapest-beer-ze.herokuapp.com/
