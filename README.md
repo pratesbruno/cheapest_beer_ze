@@ -55,7 +55,7 @@ There were a few challenges in this proccess. First, the API was not working wit
 After the API was running in a Docker container, I uploaded the Docker image to Google Container Registry and deployed it to Google Cloud Run. Now the API is available to anyone.
 
 ### Step 5 - Front-End
-Most users do not know how to work with APIs, so I created a front-end that anyone can interact with. I created a separate project for this, so that the front-end is very light and easier to deploy on Heroku.
+Most users do not know how to work with APIs, so I created a front-end using Streamlit that anyone can interact with. I created a separate project for this, so that the front-end is very light and easier to deploy on Heroku.
 
 The front-end repo can be found at: https://github.com/pratesbruno/cheapest_beer_frontend
 
