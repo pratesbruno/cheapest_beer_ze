@@ -1,7 +1,7 @@
 # Beer scraper - Zé Delivery
 This project scrapes beer prices and other info from the brazilian delivery website "Zé Delivery", and returns the cheapest options available for the inputed address, subject to constraints defined by the user.
 
-This project involves web scraping, text processing, creating python packages, creating an API, using Docker, deploying with Google Container and Google Cloud Run, building a front-end in Streamlit (different repo), using Pandas for some data manipulation, and finally deploying the final app in Heroku.
+The project involves web scraping, text processing, creating python packages, creating an API, using Docker, deploying with Google Container and Google Cloud Run, building a front-end in Streamlit (different repo), using Pandas for some data manipulation, and finally deploying the final app in Heroku.
 
 The front-end of this project can be found at: https://github.com/pratesbruno/cheapest_beer_frontend
 The deployed app can be found at: https://cheapest-beer-ze.herokuapp.com/
