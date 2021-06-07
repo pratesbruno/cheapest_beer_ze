@@ -28,6 +28,7 @@ class BeerScraper:
         self.returnable = ['Yes','No']
         self.max_mls = 99999
         self.filtered_df = None
+        self.no_suppliers = False
         
     def build_driver(self):
         options = Options()
@@ -66,9 +67,16 @@ class BeerScraper:
         url_brands = 'https://www.ze.delivery/produtos/categoria/cervejas'
         self.driver.get(url_brands)
         soup = BeautifulSoup(self.driver.page_source, "html.parser")
-        available_brands_html = soup.find_all("h2", class_="css-l9heuk-shelfTitle")
-        self.available_brands = [brand_html.text for brand_html in available_brands_html]
-        print('Available brands retrieved.')
+        # Check if its too early and there is no delivery
+        try:
+            cant_attend = soup.find_all("p", id="cant-attend-title")
+            if cant_attend:
+                self.no_suppliers = True
+                print('No suppliers opened.')
+        except:
+            available_brands_html = soup.find_all("h2", class_="css-l9heuk-shelfTitle")
+            self.available_brands = [brand_html.text for brand_html in available_brands_html]
+            print('Available brands retrieved.')
         
     def scrape_data(self):
         for brand in self.available_brands:
