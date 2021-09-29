@@ -6,7 +6,8 @@ The project involves web scraping, text processing, creating python packages, cr
 The front-end of this project can be found at: https://github.com/pratesbruno/cheapest_beer_frontend
 
 The deployed app can be found at: https://cheapest-beer-ze.herokuapp.com/
-EDIT: The deployed app is no longer working, because I stopped the GCP billing.
+
+EDIT: The deployed app is no longer working, because I stopped the GCP billing in order to stop further charges. The front-end part is still running, but not the back-end.
 
 ## Motivation
 I wanted to develop and strengthen my skills in different data-related areas, while building something useful.
